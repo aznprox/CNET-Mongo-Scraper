@@ -40,9 +40,13 @@ app.engine("handlebars", exphbs({
 }));
 app.set("view engine", "handlebars");
 
-// Database configuration with mongoose
-mongoose.connect("process.env.MONGODB_URI");
-//mongoose.connect("mongodb://localhost/mongoscraper");
+let databaseUri = "mongodb://localhost/cnetscraper";
+
+if (process.env.MONGODB_URI) {
+  mongoose.connect("process.env.MONGODB_URI");
+} else {
+  mongoose.connect(databaseUri);
+}
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -95,9 +99,9 @@ app.get("/scrape", function(req, res) {
       result.summary = $(this).find("p").text().trim();
       result.link = $(this).children(".rlLine").children("a").attr("href");
 
-      console.log(result.title);
-      console.log(result.summary);
-      console.log(result.link);
+      // console.log(result.title);
+      // console.log(result.summary);
+      // console.log(result.link);
 
       // Using our Article model, create a new entry
       // This effectively passes the result object to the entry (and the title and link)
